@@ -4,5 +4,5 @@ from celery import shared_task
 
 
 @shared_task(bind=True)
-def test(arg):
-    print(arg)
+def test(args):
+    return args
