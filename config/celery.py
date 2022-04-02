@@ -6,9 +6,10 @@ from celery.schedules import crontab
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 
-BROKER_URL = "amqp://guest:guest@localhost"
+BROKER_URL = "amqp://root:1234@localhost"
 
 app = Celery('django-note-project',
+             backend="rpc://",
              broker=BROKER_URL
              )
 app.config_from_object("django.conf:settings", namespace="CELERY")
