@@ -14,28 +14,19 @@ app = Celery('django-note-project',
              )
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()
-app.conf.update(timezone='Asia/seoul')
+app.conf.update(
+    BROKER_URL=BROKER_URL,
+    CELERY_TASK_SERIALIZER='json',
+    CELERY_ACCEPT_CONTENT=['json'],  # Ignore other content
+    timezone='Asia/seoul',
 
-app.conf.beat_schedule = {
-    'test': {
-        'task': 'apps.tasks.test',
-        'schedule': 1,
-        'args': (1,)
+    # CELERY BEAT 를 통해 반복적으로 데이터를 처리할 수 있다
+    CELERYBEAT_SCHEDULE={
+        'test': {
+            'task': 'apps.tasks.test',
+            'schedule': 0.1,
+            'args': ()
+        }
     }
-}
 
-import kombu
-
-with app.pool.acquire(block=True) as conn:
-    exchange = kombu.Exchange(
-        name=BROKER_URL + "/task", type="topic", durable=True, channel=conn
-    )
-    exchange.declare()
-
-    queue = kombu.Queue(
-        name="my_queue",
-        exchange=exchange,
-        routing_key="my_queue.#",
-        channel=conn,
-    )
-    queue.declare()
+)

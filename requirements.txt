@@ -12,6 +12,7 @@ django-extensions==3.1.5
 django-sqlformatter==1.0.3
 kombu==5.2.4
 mysqlclient==2.1.0
+pika==1.2.0
 prompt-toolkit==3.0.28
 Pygments==2.11.2
 pytz==2022.1

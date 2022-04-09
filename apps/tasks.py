@@ -9,6 +9,8 @@ def test_function(x, y):
     return x + y
 
 
-@shared_task(bind=True)
-def test(args):
-    return args
+# beat schedule
+@shared_task()
+def test():
+    data = {"task": 1}
+    return data
